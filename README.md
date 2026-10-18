@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Spoko
 
 Add or remove images in `dist/assets/promo`, then run:
@@ -22,3 +23,12 @@ are supported. Images are sorted by filename. Keep a backup: `dist` is ignored
 by Git.
 
 Run `npm test` to verify folder discovery, repeated builds, removals, and reloads.
+=======
+# Spoko.Site 
+
+---- 
+
+Spoko Freelance website
+
+2026
+>>>>>>> 53d90b3d27c39197c3bbb5a67772c99f1164894d
