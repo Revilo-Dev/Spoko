@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { createRoot } from 'react-dom/client'
 import './styles.css'
 
-const email = 'spoko.reception@gmail.com'
+const email = 'contact@spoko.site'
 
 function Arrow({ diagonal = false }) {
   return <span className="arrow" aria-hidden="true">{diagonal ? '↗' : '→'}</span>
