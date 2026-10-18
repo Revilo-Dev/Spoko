@@ -16,7 +16,7 @@ function readFiles(directory, prefix = '') {
 
 export function promoImagesPlugin() {
   let config
-  const promoDirectory = () => path.resolve(config.root, config.build.outDir, 'assets/promo')
+  const promoDirectory = () => path.resolve(config.root, 'public/assets/promo')
   const images = () => readFiles(promoDirectory())
     .filter(({ file }) => imageExtension.test(file))
     .sort((a, b) => a.file < b.file ? -1 : a.file > b.file ? 1 : 0)
