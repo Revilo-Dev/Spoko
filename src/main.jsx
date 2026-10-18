@@ -3,27 +3,34 @@ import { createRoot } from 'react-dom/client'
 import './styles.css'
 
 const email = 'spoko.reception@gmail.com'
-const portfolioImages = [
-  { file: 'Green_Orange_Purple_Colorful_Mexican_Food_Dinner_Party_Flyer.png', alt: 'Colourful Mexican food dinner party flyer' },
-  { file: 'image.png', alt: 'Spoko portfolio design one' },
-  { file: 'Spoko.png', alt: 'Spoko portfolio design two' },
-  { file: 'Spoko_1.png', alt: 'Spoko portfolio design three' },
-]
 
 function Arrow({ diagonal = false }) {
   return <span className="arrow" aria-hidden="true">{diagonal ? '↗' : '→'}</span>
 }
 
 function App() {
+  const [portfolioImages, setPortfolioImages] = useState([])
   const [menuOpen, setMenuOpen] = useState(false)
   const [portfolioIndex, setPortfolioIndex] = useState(0)
   const [portfolioPaused, setPortfolioPaused] = useState(false)
 
   useEffect(() => {
-    if (portfolioPaused) return
+    const controller = new AbortController()
+    fetch('/assets/promo/images.json', { cache: 'no-store', signal: controller.signal })
+      .then((response) => {
+        if (!response.ok) throw new Error('Could not load promo images')
+        return response.json()
+      })
+      .then(setPortfolioImages)
+      .catch((error) => { if (error.name !== 'AbortError') console.error(error) })
+    return () => controller.abort()
+  }, [])
+
+  useEffect(() => {
+    if (portfolioPaused || portfolioImages.length < 2) return
     const timer = window.setInterval(() => setPortfolioIndex((index) => (index + 1) % portfolioImages.length), 5000)
     return () => window.clearInterval(timer)
-  }, [portfolioPaused])
+  }, [portfolioPaused, portfolioImages.length])
 
   useEffect(() => {
     const observer = new IntersectionObserver((entries) => {
@@ -36,7 +43,7 @@ function App() {
     }, { threshold: 0.12 })
     document.querySelectorAll('.reveal').forEach((element) => observer.observe(element))
     return () => observer.disconnect()
-  }, [])
+  }, [portfolioImages.length])
 
   const closeMenu = () => setMenuOpen(false)
 
@@ -119,16 +126,16 @@ function App() {
             <h2 id="portfolio-title">Made with <em>feeling.</em></h2>
             <p>A selection of ideas brought to life.</p>
           </div>
-          <div className="portfolio-gallery reveal" onMouseEnter={() => setPortfolioPaused(true)} onMouseLeave={() => setPortfolioPaused(false)} onFocusCapture={() => setPortfolioPaused(true)} onBlurCapture={(event) => { if (!event.currentTarget.contains(event.relatedTarget)) setPortfolioPaused(false) }}>
+          {portfolioImages.length > 0 && <div className="portfolio-gallery reveal" onMouseEnter={() => setPortfolioPaused(true)} onMouseLeave={() => setPortfolioPaused(false)} onFocusCapture={() => setPortfolioPaused(true)} onBlurCapture={(event) => { if (!event.currentTarget.contains(event.relatedTarget)) setPortfolioPaused(false) }}>
             <div className="portfolio-frame">
-              {portfolioImages.map((image, index) => <img key={image.file} className={index === portfolioIndex ? 'portfolio-image is-active' : 'portfolio-image'} src={`/assets/promo/${image.file}`} alt={image.alt} aria-hidden={index !== portfolioIndex} />)}
+              {portfolioImages.map((image, index) => <img key={image.file} className={index === portfolioIndex ? 'portfolio-image is-active' : 'portfolio-image'} src={image.src} alt={image.alt} aria-hidden={index !== portfolioIndex} />)}
             </div>
             <div className="portfolio-controls">
               <span className="portfolio-count">{String(portfolioIndex + 1).padStart(2, '0')} <span>/</span> {String(portfolioImages.length).padStart(2, '0')}</span>
               <div className="portfolio-dots" aria-label="Choose portfolio image">{portfolioImages.map((image, index) => <button key={image.file} type="button" className={index === portfolioIndex ? 'portfolio-dot is-active' : 'portfolio-dot'} aria-label={`Show portfolio image ${index + 1}`} aria-current={index === portfolioIndex ? 'true' : undefined} onClick={() => setPortfolioIndex(index)} />)}</div>
               <div className="portfolio-arrows"><button type="button" aria-label="Previous portfolio image" onClick={() => setPortfolioIndex((index) => (index - 1 + portfolioImages.length) % portfolioImages.length)}>←</button><button type="button" aria-label="Next portfolio image" onClick={() => setPortfolioIndex((index) => (index + 1) % portfolioImages.length)}>→</button></div>
             </div>
-          </div>
+          </div>}
         </section>
 
         <section className="contact section-pad" id="contact">
