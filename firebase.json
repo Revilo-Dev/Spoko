@@ -6,6 +6,12 @@
       "**/.*",
       "**/node_modules/**"
     ],
+    "headers": [
+      {
+        "source": "/assets/promo/**",
+        "headers": [{ "key": "Cache-Control", "value": "no-store" }]
+      }
+    ],
     "rewrites": [
       {
         "source": "**",
