@@ -109,7 +109,7 @@ export function promoImagesPlugin() {
       })
 
       for (const asset of readFiles(config.publicDir)) {
-        if (asset.file.startsWith('assets/promo/')) continue
+        if (asset.file.startsWith('assets/promo/') || asset.file.startsWith('assets/promo-display/')) continue
         this.emitFile({ type: 'asset', fileName: asset.file, source: asset.source })
       }
 
