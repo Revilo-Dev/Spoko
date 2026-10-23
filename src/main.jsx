@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { createRoot } from 'react-dom/client'
 import './styles.css'
 
-const email = 'spoko.reception@gmail.com'
+const email = 'contact@spoko.site'
 
 function Arrow({ diagonal = false }) {
   return <span className="arrow" aria-hidden="true">{diagonal ? '↗' : '→'}</span>
@@ -153,7 +153,7 @@ function App() {
         <a className="footer-logo" href="#top">spoko<span>.</span></a>
         <div><span>BASED IN</span><p>Springfield, 4300</p></div>
         <div><span>SAY HELLO</span><p><a href={`mailto:${email}`}>{email}</a></p></div>
-        <div className="footer-end"><a href="#top">Back to top ↑</a><small>© {new Date().getFullYear()} SPOKO</small></div>
+        <div className="footer-end"><a href="#top">Back to top ↑</a><small>© {new Date().getFullYear()} SPOKO | ABN: 27 526 508 101</small></div>
       </footer>
     </>
   )
