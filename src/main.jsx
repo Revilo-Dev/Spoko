@@ -4,6 +4,11 @@ import './styles.css'
 
 const email = 'spoko.reception@gmail.com'
 const flyerClasses = ['flyer-back', 'flyer-middle', 'flyer-front']
+const headerFlyerFiles = [
+  '1-Spoko Scoops.png',
+  '2-Spoko Thai.png',
+  '3-Spoko Florist.png',
+]
 
 function Arrow({ diagonal = false }) {
   return <span className="arrow" aria-hidden="true">{diagonal ? '↗' : '→'}</span>
@@ -14,6 +19,10 @@ function App() {
   const [menuOpen, setMenuOpen] = useState(false)
   const [portfolioIndex, setPortfolioIndex] = useState(0)
   const [portfolioPaused, setPortfolioPaused] = useState(false)
+  const headerImages = [
+    ...headerFlyerFiles.map((file) => portfolioImages.find((image) => image.file === file)).filter(Boolean),
+    ...portfolioImages.filter((image) => !headerFlyerFiles.includes(image.file)),
+  ].slice(0, 3)
 
   useEffect(() => {
     const controller = new AbortController()
@@ -84,7 +93,7 @@ function App() {
               <a className="contact-button" href={`mailto:${email}?subject=Let's%20work%20together`}>Start a conversation <Arrow diagonal /></a>
             </div>
             <div className="hero-art flyer-stack" role="img" aria-label="A stack of promotional designs from the portfolio">
-              {portfolioImages.slice(0, 3).map((image, index) => <div key={image.file} className={`flyer ${flyerClasses[index]}`}><img src={image.src} alt="" /></div>)}
+              {headerImages.map((image, index) => <div key={image.file} className={`flyer ${flyerClasses[index]}`}><img src={image.src} alt="" /></div>)}
               <div className="flyer-stack-label">CAMPAIGNS <span>•</span> CONTENT <span>•</span> SOCIAL</div>
             </div>
           </div>
