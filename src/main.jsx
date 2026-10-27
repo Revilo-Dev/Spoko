@@ -3,6 +3,12 @@ import { createRoot } from 'react-dom/client'
 import './styles.css'
 
 const email = 'contact@spoko.site'
+const navigationLinks = [
+  { id: 'portfolio', label: 'Portfolio' },
+  { id: 'about', label: 'About' },
+  { id: 'approach', label: 'Approach' },
+  { id: 'contact', label: 'Contact' },
+]
 const flyerClasses = ['flyer-back', 'flyer-middle', 'flyer-front']
 const headerFlyerFiles = [
   '1-Spoko Scoops.png',
@@ -17,6 +23,8 @@ function Arrow({ diagonal = false }) {
 function App() {
   const [portfolioImages, setPortfolioImages] = useState([])
   const [menuOpen, setMenuOpen] = useState(false)
+  const [headerCompact, setHeaderCompact] = useState(false)
+  const [activeSection, setActiveSection] = useState('')
   const [portfolioIndex, setPortfolioIndex] = useState(0)
   const [portfolioPaused, setPortfolioPaused] = useState(false)
   const headerImages = [
@@ -63,25 +71,79 @@ function App() {
     return () => observer.disconnect()
   }, [])
 
+  useEffect(() => {
+    const sections = Array.from(document.querySelectorAll('main section[id]'))
+    let frame = 0
+
+    const updateNavigation = () => {
+      frame = 0
+      setHeaderCompact(window.scrollY > 64)
+
+      const sectionLine = Math.min(window.innerHeight * 0.3, 240)
+      let currentSection = ''
+      for (const section of sections) {
+        if (section.getBoundingClientRect().top <= sectionLine) currentSection = section.id
+      }
+      if (window.scrollY + window.innerHeight >= document.documentElement.scrollHeight - 4) {
+        currentSection = sections.at(-1)?.id ?? ''
+      }
+      setActiveSection(currentSection)
+    }
+
+    const scheduleUpdate = () => {
+      if (!frame) frame = window.requestAnimationFrame(updateNavigation)
+    }
+
+    updateNavigation()
+    window.addEventListener('scroll', scheduleUpdate, { passive: true })
+    window.addEventListener('resize', scheduleUpdate)
+    return () => {
+      window.cancelAnimationFrame(frame)
+      window.removeEventListener('scroll', scheduleUpdate)
+      window.removeEventListener('resize', scheduleUpdate)
+    }
+  }, [])
+
+  useEffect(() => {
+    if (!menuOpen) return
+
+    const closeOnEscape = (event) => {
+      if (event.key === 'Escape') {
+        setMenuOpen(false)
+        document.querySelector('.menu-button')?.focus()
+      }
+    }
+    const desktopQuery = window.matchMedia('(min-width: 651px)')
+    const closeOnDesktop = (event) => {
+      if (event.matches) setMenuOpen(false)
+    }
+
+    window.addEventListener('keydown', closeOnEscape)
+    desktopQuery.addEventListener('change', closeOnDesktop)
+    return () => {
+      window.removeEventListener('keydown', closeOnEscape)
+      desktopQuery.removeEventListener('change', closeOnDesktop)
+    }
+  }, [menuOpen])
+
   const closeMenu = () => setMenuOpen(false)
 
   return (
     <>
-      <header className="site-header">
-        <a className="wordmark" href="#top" aria-label="Spoko home" onClick={closeMenu}><img className="wordmark-symbol" src="/assets/S.svg" alt="" /><span>poko<span className="wordmark-dot">.</span></span></a>
-        <nav className={menuOpen ? 'nav nav-open' : 'nav'} aria-label="Main navigation">
-          <a href="#about" onClick={closeMenu}>About</a>
-          <a href="#approach" onClick={closeMenu}>Approach</a>
-          <a href="#portfolio" onClick={closeMenu}>Portfolio</a>
-          <a href="#contact" onClick={closeMenu}>Contact</a>
-        </nav>
-        <a className="header-cta" href={`mailto:${email}`}>Let's talk <Arrow diagonal /></a>
-        <button className="menu-button" type="button" aria-label={menuOpen ? 'Close menu' : 'Open menu'} aria-expanded={menuOpen} onClick={() => setMenuOpen(!menuOpen)}>
-          <span></span><span></span>
-        </button>
-      </header>
+      <div className="header-space" id="top">
+        <header className={`site-header${headerCompact ? ' is-compact' : ''}`}>
+          <a className="wordmark" href="#top" aria-label="Spoko home" onClick={closeMenu}><img className="wordmark-symbol" src="/assets/S.png" alt="" /><span>poko<span className="wordmark-dot">.</span></span></a>
+          <nav id="main-navigation" className={menuOpen ? 'nav nav-open' : 'nav'} aria-label="Main navigation">
+            {navigationLinks.map(({ id, label }) => <a key={id} href={`#${id}`} aria-current={activeSection === id ? 'location' : undefined} onClick={closeMenu}>{label}</a>)}
+          </nav>
+          <a className="header-cta" href={`mailto:${email}`}>Let's talk <Arrow diagonal /></a>
+          <button className="menu-button" type="button" aria-label={menuOpen ? 'Close menu' : 'Open menu'} aria-expanded={menuOpen} aria-controls="main-navigation" onClick={() => setMenuOpen((open) => !open)}>
+            <span></span><span></span>
+          </button>
+        </header>
+      </div>
 
-      <main id="top">
+      <main>
         <section className="hero" aria-labelledby="hero-title">
           <div className="hero-content">
             <div className="hero-copy">
@@ -154,11 +216,36 @@ function App() {
       </main>
 
       <footer className="footer">
-        <a className="footer-logo" href="#top">spoko<span>.</span></a>
-        <div><span>BASED IN</span><p>Springfield, 4300</p></div>
-        <div><span>SAY HELLO</span><p><a href={`mailto:${email}`}>{email}</a></p></div>
-        <div className="footer-end"><a href="#top">Back to top ↑</a><small>© {new Date().getFullYear()} SPOKO | ABN: 27 526 508 101</small></div>
-        <a href="https://revilodev.com" target="_blank" rel="noopener noreferrer">ReviloDev Site 2026</a>
+        <div className="footer-main">
+          <div className="footer-brand">
+            <a className="wordmark footer-logo" href="#top" aria-label="Spoko home"><img className="wordmark-symbol" src="/assets/S.png" alt="" /><span>poko<span className="wordmark-dot">.</span></span></a>
+            <p>Thoughtful ideas.<br />Made with character.</p>
+          </div>
+          <div className="footer-column">
+            <p className="footer-label">Explore</p>
+            <nav className="footer-nav" aria-label="Footer navigation">
+              {navigationLinks.map(({ id, label }) => <a key={id} href={`#${id}`}>{label}</a>)}
+            </nav>
+          </div>
+          <div className="footer-column">
+            <p className="footer-label">Say hello</p>
+            <a className="footer-email" href={`mailto:${email}`}>{email} <Arrow diagonal /></a>
+            <div className="footer-location">
+              <p className="footer-label">Based in</p>
+              <p>Springfield, 4300<br />Queensland, Australia</p>
+            </div>
+          </div>
+          <a className="footer-back-top" href="#top"><span>Back to top</span><span className="footer-back-top-icon" aria-hidden="true">↑</span></a>
+        </div>
+        <div className="footer-bottom">
+          <div className="footer-legal"><small>© {new Date().getFullYear()} Spoko</small><span>ABN: 27 526 508 101</span></div>
+          <a className="footer-credit" href="https://revilodev.com" target="_blank" rel="noopener noreferrer" aria-label="Site by ReviloDev, 2026 (opens in a new tab)">
+            <img className="credit-logo" src={`${import.meta.env.BASE_URL}assets/revilodev.png`} width="40" height="40" alt="" />
+            <span className="credit-copy"><span>Site by</span><strong>ReviloDev</strong></span>
+            <span className="credit-year">2026</span>
+            <Arrow diagonal />
+          </a>
+        </div>
       </footer>
     </>
   )
