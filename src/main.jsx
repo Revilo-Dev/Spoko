@@ -180,38 +180,58 @@ function App() {
 
         <section className="intro section-pad" id="about">
           <div className="intro-main reveal">
+            <p className="section-kicker"><span>01</span> A SMALL TEAM, WITH ROOM FOR BIG IDEAS</p>
             <h2>Small studio.<br /><em>Big feeling.</em></h2>
-            <div className="intro-side">
-              <span className="asterisk">✳</span>
-              <p>Spoko is an independent creative studio with a soft spot for the details. We bring clarity, curiosity, and a little potential to every idea.</p>
-              <a className="text-link" href={`mailto:${email}?subject=Hello%20Spoko`}>Get to know us <Arrow diagonal /></a>
-            </div>
+            <p className="intro-description">We’re a team of five bringing strategy, design and promotion together. Work directly with the people shaping your brand, building your website and putting your message out into the world.</p>
+          </div>
+          <div className="service-grid">
+            <article className="service-card reveal">
+              <div className="service-image"><img src="/assets/promo/6-Spoko Pizza.png" alt="Website design shown on a warm, colourful campaign layout" loading="lazy" /></div>
+              <div className="service-meta"><span>02</span><span>WEB</span></div>
+              <h3>Websites</h3><p>A thoughtful, easy-to-use home for your business that turns a first visit into a next step.</p>
+            </article>
+            <article className="service-card reveal">
+              <div className="service-image"><img src="/assets/promo/3-Spoko Florist.png" alt="Floral graphic design with expressive typography" loading="lazy" /></div>
+              <div className="service-meta"><span>03</span><span>DESIGN</span></div>
+              <h3>Graphic design</h3><p>Distinctive visuals and a consistent look that make your brand easy to recognise.</p>
+            </article>
+            <article className="service-card reveal">
+              <div className="service-image"><img src="/assets/promo/2-Spoko Thai.png" alt="Restaurant social promotion artwork for a food business" loading="lazy" /></div>
+              <div className="service-meta"><span>04</span><span>SOCIAL</span></div>
+              <h3>Social promotion</h3><p>Useful, engaging content that keeps you part of the conversation with your audience.</p>
+            </article>
+            <article className="service-card reveal">
+              <div className="service-image"><img src="/assets/promo/1-Spoko Scoops.png" alt="Bright ice cream advertising campaign creative" loading="lazy" /></div>
+              <div className="service-meta"><span>05</span><span>REACH</span></div>
+              <h3>Advertising</h3><p>Focused campaigns that put your message in front of the people most likely to care.</p>
+            </article>
           </div>
         </section>
 
 
 
         <section className="approach section-pad" id="approach">
-
           <div className="approach-heading reveal">
             <h2>Less noise.<br /><em>More impact.</em></h2>
-            <p>Good work starts with listening. From the first conversation to the final detail, we keep the process human and the ideas purposeful.</p>
+            <p>Good design and advertising start with a reason. We find the clearest way to tell your story, then make every piece work together—so your marketing feels recognisable, reaches the right people and gives them a reason to act.</p>
           </div>
-          <div className="principles">
-            <article className="principle reveal"><span className="principle-index">01</span><h3>Curiosity first</h3><p>We ask the right questions and make room for fresh perspectives.</p><Arrow diagonal /></article>
-            <article className="principle reveal"><span className="principle-index">02</span><h3>Keep it clear</h3><p>Strong ideas deserve a simple, confident way to be seen.</p><Arrow diagonal /></article>
-            <article className="principle reveal"><span className="principle-index">03</span><h3>Make it matter</h3><p>Every choice should feel intentional and leave an impression.</p><Arrow diagonal /></article>
+          <div className="process-track">
+            <article className="process-step reveal"><span className="process-marker">01</span><p className="process-label">TALK IT THROUGH</p><h3>Start with a proper chat</h3><p>We get to know you, your business and what you’re hoping to do. We’ll trade ideas, ask questions and work out who we need to reach.</p></article>
+            <article className="process-step reveal"><span className="process-marker">02</span><p className="process-label">MAKE A PLAN TOGETHER</p><h3>Choose a direction</h3><p>We’ll bring a few ideas to the table and talk them through with you. Together, we settle on the design, message and best way forward.</p></article>
+            <article className="process-step reveal"><span className="process-marker">03</span><p className="process-label">MAKE THE PIECES</p><h3>Build what you need</h3><p>With a direction agreed, we create the website, graphics and campaign. We keep you in the loop as the work takes shape.</p></article>
+            <article className="process-step reveal"><span className="process-marker">04</span><p className="process-label">PUT IT INTO PRACTICE</p><h3>Get it out there</h3><p>We help get everything live, from publishing the site to rolling out social posts and ads. Then we look at what’s working and decide the next step with you.</p></article>
           </div>
         </section>
 
         <section className="contact section-pad" id="contact">
-
-          <div className="contact-content reveal">
-            <p className="contact-kicker">HAVE SOMETHING IN MIND?</p>
-            <h2>Let's make<br /><em>it happen.</em></h2>
+          <div className="contact-card reveal">
+            <div className="contact-content">
+              <p className="contact-kicker"><span className="orange-line"></span> HAVE A GOOD ONE IN MIND?</p>
+              <h2>Let's make it <em>happen.</em></h2>
+              <p className="contact-note">Tell us what you’re working on. We’ll bring the right people and ideas to the table.</p>
+            </div>
             <a className="contact-button" href={`mailto:${email}?subject=Let's%20work%20together`}>Start a conversation <Arrow diagonal /></a>
           </div>
-          <div className="contact-flower" aria-hidden="true">✳</div>
         </section>
       </main>
 
